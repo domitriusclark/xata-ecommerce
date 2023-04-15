@@ -13,7 +13,7 @@ const tables = [
       { name: "name", type: "string", notNull: true, defaultValue: "product" },
       { name: "price", type: "float", notNull: true, defaultValue: "0.00" },
       { name: "description", type: "text" },
-      { name: "in_stock", type: "int", notNull: true, defaultValue: "0" },
+      { name: "quantity", type: "int", notNull: true, defaultValue: "0" },
       { name: "image_urls", type: "multiple" },
     ],
   },
