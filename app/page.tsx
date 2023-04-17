@@ -13,6 +13,13 @@ export default async function Home() {
           key={product.id}
           className="flex flex-col items-center justify-center"
         >
+          {product.image_urls && product.description && (
+            <img
+              className="w-1/3"
+              src={product.image_urls[0]}
+              alt={product.description}
+            />
+          )}
           <h1 className="text-5xl font-bold">{product.name}</h1>
           <p className="text-2xl">{product.description}</p>
           <p className="text-2xl">{product.price}</p>

@@ -1,4 +1,6 @@
+import ProductCard from "@/app/components/ProductCard";
 import { getXataClient } from "@/lib/xata";
+import Cart from "@/app/components/Cart";
 
 type PageProps = {
   params: { id: string };
@@ -17,6 +19,13 @@ export default async function ProductPage({ params }: PageProps) {
     return (
       <main>
         <section>
+          {product.image_urls && product.description && (
+            <img
+              className="w-1/3"
+              src={product.image_urls[0]}
+              alt={product.description}
+            />
+          )}
           <h1>{product.name}</h1>
           <p>{product.description}</p>
           <p>{product.price}</p>
@@ -28,11 +37,8 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <main>
-      <section>
-        <h1>{product.name}</h1>
-        <p>{product.description}</p>
-        <p>{product.price}</p>
-      </section>
+      <Cart />
+      <ProductCard product={product} />
     </main>
   );
 }
