@@ -1,8 +1,9 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { NextApiHandler } from "next";
+import { NextApiResponse, NextApiRequest } from "next";
 import { getXataClient } from "../../../lib/xata";
 
+// @ts-nocheck
 interface Product {
   id: string;
   name: string;
@@ -18,9 +19,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY, {
   apiVersion: "2022-11-15",
 });
 
-const webhookHandler: NextApiHandler = async (req, res) => {
-  if (req.method === "POST") {
-    const buf = await buffer(req);
+export async function POST(req: NextApiRequest,res: NextApiResponse) {
+  const buf = await buffer(req);
 
     const signature = req.headers["stripe-signature"];
     let event: Stripe.Event;
@@ -57,11 +57,9 @@ const webhookHandler: NextApiHandler = async (req, res) => {
     }
 
     res.json({ received: true });
-  } else {
-    res.setHeader("Allow", "POST");
-    res.status(405).end("Method Not Allowed");
   }
-};
+}
+
 
 async function handleProductCreated(event: Stripe.Event) {
   const product = event.data.object as Stripe.Product;
@@ -83,4 +81,8 @@ async function handleProductCreated(event: Stripe.Event) {
   }
 }
 
-export default webhookHandler;
+export const confif = {
+  api: {
+    bodyParser: false
+  }
+}
