@@ -75,7 +75,7 @@ async function handleProductCreated(event: Stripe.Event) {
   }
 }
 
-export const confif = {
+export const config = {
   api: {
     bodyParser: false,
   },
