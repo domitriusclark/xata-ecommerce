@@ -15,9 +15,9 @@ if (!process.env.STRIPE_SECRET_API_KEY) {
   throw new Error("The STRIPE_SECRET_API_KEY environment variable is missing.");
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY, {
-  apiVersion: "2022-11-15",
-});
+// const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY, {
+//   apiVersion: "2022-11-15",
+// });
 
 export async function POST(req: NextRequest) {
   console.log("Event received");
