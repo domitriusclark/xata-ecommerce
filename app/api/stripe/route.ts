@@ -60,21 +60,16 @@ export async function POST(req: NextApiRequest,res: NextApiResponse) {
   }
 }
 
-
 async function handleProductCreated(event: Stripe.Event) {
   const product = event.data.object as Stripe.Product;
-  const newProduct: Product = {
-    id: product.id,
-    name: product.name,
-    description: product.description ?? "",
-    price: product.price ? product.price / 100 : 0,
-  };
+
+  console.log({product})
 
   const xata = getXataClient();
 
   try {
-    await xata.db.products.create(newProduct);
-    console.log(`✅ Created new product with id ${newProduct.id}`);
+    await xata.db.products.create(product);
+    console.log(`✅ Created new product with id ${product.id}`);
   } catch (error: any) {
     console.log(`❌ Error creating product: ${error.message}`);
     throw new Error(`Error creating product: ${error.message}`);
