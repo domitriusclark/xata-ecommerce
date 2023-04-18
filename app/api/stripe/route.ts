@@ -1,7 +1,7 @@
 import { buffer } from "micro";
 import Stripe from "stripe";
-import { NextApiResponse, NextApiRequest } from "next";
 import { getXataClient } from "../../../lib/xata";
+import { NextRequest, NextResponse } from "next/server";
 
 // @ts-nocheck
 interface Product {
@@ -19,15 +19,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY, {
   apiVersion: "2022-11-15",
 });
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const buf = await buffer(req);
+export async function POST(req: NextRequest) {
+  const buf = await buffer(await req.json());
 
-  const signature = req.headers["stripe-signature"];
+  const signature = req.headers.get("stripe-signature");
   let event: Stripe.Event;
 
   if (!signature) {
-    res.status(400).send("Webhook Error: Missing Stripe-Signature");
-    return;
+    console.log("❌ No signature found");
+
+    return new Response("No signature found", {
+      status: 400,
+    });
   }
 
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
@@ -44,7 +47,9 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     );
   } catch (err: any) {
     console.log(`❌ Error message: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    return new Response(`Webhook Error: ${err.message}`, {
+      status: 400,
+    });
   }
 
   switch (event.type) {
@@ -56,7 +61,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
       console.log(`Unhandled event type ${event.type}`);
   }
 
-  res.json({ received: true });
+  NextResponse.json({ received: true });
 }
 
 async function handleProductCreated(event: Stripe.Event) {
