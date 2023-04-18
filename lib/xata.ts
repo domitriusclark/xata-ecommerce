@@ -8,13 +8,25 @@ import type {
 
 const tables = [
   {
-    name: "products",
+    name: "Product",
     columns: [
-      { name: "name", type: "string", notNull: true, defaultValue: "product" },
-      { name: "price", type: "float", notNull: true, defaultValue: "0.00" },
+      { name: "stripe_id", type: "string", unique: true },
+      { name: "active", type: "bool", defaultValue: "true" },
+      { name: "default_price", type: "string", unique: true },
       { name: "description", type: "text" },
-      { name: "quantity", type: "int", notNull: true, defaultValue: "0" },
-      { name: "image_urls", type: "multiple" },
+      {
+        name: "name",
+        type: "string",
+        notNull: true,
+        defaultValue: "Product Name",
+      },
+      { name: "created", type: "datetime" },
+      { name: "images", type: "multiple" },
+      { name: "livemode", type: "bool", defaultValue: "false" },
+      { name: "statement_descriptor", type: "string" },
+      { name: "tax_code", type: "string" },
+      { name: "updated", type: "datetime" },
+      { name: "url", type: "string" },
     ],
   },
 ] as const;
@@ -22,11 +34,11 @@ const tables = [
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
 
-export type Products = InferredTypes["products"];
-export type ProductsRecord = Products & XataRecord;
+export type Product = InferredTypes["Product"];
+export type ProductRecord = Product & XataRecord;
 
 export type DatabaseSchema = {
-  products: ProductsRecord;
+  Product: ProductRecord;
 };
 
 const DatabaseClient = buildClient();
