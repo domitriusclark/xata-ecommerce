@@ -11,14 +11,15 @@ export default function ProductCard({ product }: { product: ProductsRecord }) {
     return num.toString().replace(".", "");
   };
 
-  const cleanObjectForCart = (obj: any) => {
+  const cleanObjectForCart = (obj: ProductsRecord) => {
     return {
       id: obj.id,
       name: obj.name,
       description: obj.description,
       price: removeDecimal(obj.price),
-      image: obj.image_urls[0],
+      image: obj.image_urls ? obj.image_urls[0] : [],
       currency: "USD",
+      sku: "",
     };
   };
 

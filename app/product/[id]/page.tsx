@@ -20,6 +20,7 @@ export default async function ProductPage({ params }: PageProps) {
       <main>
         <section>
           {product.image_urls && product.description && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               className="w-1/3"
               src={product.image_urls[0]}
